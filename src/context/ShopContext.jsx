@@ -13,7 +13,17 @@ const ShopContextProvider = (props) => {
   const delivery_fee = 10;
   const [search,setSearch] = useState('');
   const [showSearch,setShowSearch] = useState(false);
-  const [cartItems,setCartItems] = useState({});
+
+
+
+  // Initialize cart from localStorage if available
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem('cartItems');
+    return savedCart ? JSON.parse(savedCart) : {}; // Empty object if no saved cart
+  });
+
+
+
   const navigate = useNavigate();
 
 
@@ -40,7 +50,12 @@ const ShopContextProvider = (props) => {
     }
     setCartItems(cartData);
 
-  }
+  };
+
+    // Save cart to localStorage whenever cartItems changes
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const getCartCount = ()=>{
     let totalCount = 0;
